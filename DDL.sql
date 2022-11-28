@@ -2,10 +2,8 @@
 
 CREATE TABLE IF NOT EXISTS public.profiles (
     profile_id uuid PRIMARY KEY,
-    first_name text NOT NULL,
-    last_name text NOT NULL,
-    create_date date NOT NULL,
-    last_sign_in date NOT NULL,
+    first_name text NULL,
+    last_name text NULL,
     FOREIGN KEY (profile_id) REFERENCES auth.users (id)
 );
 
@@ -39,7 +37,7 @@ CREATE TABLE IF NOT EXISTS public.user_address(
 CREATE TABLE IF NOT EXISTS public.orders(
     order_id serial PRIMARY KEY,
     profile_id uuid NOT NULL,
-    order_date date NOT NULL,
+    order_date timestamp NOT NULL,
     order_total decimal(19,4) NOT NULL,
     total_quantity int NOT NULL,
     FOREIGN KEY (profile_id) REFERENCES profiles

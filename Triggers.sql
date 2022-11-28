@@ -5,8 +5,8 @@ LANGUAGE plpgsql
 SECURITY definer SET search_path = PUBLIC
 AS $$
 BEGIN
-  INSERT INTO public.profiles (profile_id)
-  VALUES (new.profile_id);
+  INSERT INTO public.profiles (profile_id, first_name, last_name)
+  VALUES (new.id, NULL, NULL);
   RETURN NEW;
 END;
 $$;
@@ -15,3 +15,6 @@ $$;
 CREATE TRIGGER on_auth_user_created
   AFTER INSERT ON auth.users
   FOR EACH ROW EXECUTE PROCEDURE public.handle_new_user();
+
+  -- Set up Book Image Storage:
+  
