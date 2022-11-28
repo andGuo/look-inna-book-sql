@@ -5,8 +5,8 @@ LANGUAGE plpgsql
 SECURITY definer SET search_path = PUBLIC
 AS $$
 BEGIN
-  INSERT INTO public.profiles (ID)
-  VALUES (new.id);
+  INSERT INTO public.profiles (profile_id)
+  VALUES (new.profile_id);
   RETURN NEW;
 END;
 $$;
