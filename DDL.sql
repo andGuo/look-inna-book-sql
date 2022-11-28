@@ -49,7 +49,7 @@ CREATE TABLE IF NOT EXISTS public.orders(
     profile_id uuid NOT NULL,
     order_date date NOT NULL,
     order_total decimal(19,4) NOT NULL,
-    total_quantity int(11) unsigned NOT NULL,
+    total_quantity int unsigned NOT NULL,
     FOREIGN KEY (profile_id) REFERENCES profiles
 );
 
@@ -83,7 +83,7 @@ CREATE TABLE IF NOT EXISTS public.billing_address(
 CREATE TABLE IF NOT EXISTS public.carts(
     profile_id uuid PRIMARY KEY,
     cart_total decimal(19,4) NOT NULL,
-    total_quantity int(11) unsigned NOT NULL,
+    total_quantity int unsigned NOT NULL,
     FOREIGN KEY (profile_id) REFERENCES profiles
 );
 
@@ -102,8 +102,16 @@ CREATE TABLE IF NOT EXISTS public.publisher_address(
     city text NOT NULL,
     state text NOT NULL,
     zip_code text NOT NULL,
-    phone_number text NOT NULL,
-    FOREIGN KEY (order_id) REFERENCES orders
+    FOREIGN KEY (publisher_id) REFERENCES publishers
+);
+
+CREATE TABLE IF NOT EXISTS public.payment_info(
+    publisher_id uuid PRIMARY KEY,
+    transit_num numeric(5, 0) NOT NULL,
+    institution_num numeric(3, 0) NOT NULL,
+    account_num numeric(12, 0) NOT NULL,
+    accounts_payable decimal(19,4) NOT NULL,
+    FOREIGN KEY (publisher_id) REFERENCES publishers
 );
 
 CREATE TABLE IF NOT EXISTS public.books(
@@ -117,11 +125,23 @@ CREATE TABLE IF NOT EXISTS public.books(
     FOREIGN KEY (profile_id) REFERENCES publishers 
 );
 
+CREATE TABLE IF NOT EXISTS public.cart_books (
+    cart_id uuid,
+    isbn text,
+    quantity int unsigned NOT NULL,
+    PRIMARY KEY (cart_id, isbn),
+    FOREIGN KEY (profile_id) REFERENCES carts,
+    FOREIGN KEY (isbn) REFERENCES books
+);
+
+CREATE TABLE IF NOT EXISTS public.order_books (
+    order_id int,
+    isbn text,
+    quantity int unsigned NOT NULL,
+    PRIMARY KEY (order_id, isbn),
+    FOREIGN KEY (order_id) REFERENCES orders,
+    FOREIGN KEY (isbn) REFERENCES books
+);
 
 
 
-
-ALTER TABLE
-    EMPLOYEE
-ADD
-    CONSTRAINT fk_employee_depart FOREIGN KEY (dno) REFERENCES DEPARTMENT;
