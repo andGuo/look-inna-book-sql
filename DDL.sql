@@ -114,16 +114,15 @@ CREATE TABLE IF NOT EXISTS public.books(
 );
 
 CREATE TABLE IF NOT EXISTS public.genres (
-    genre_id serial PRIMARY KEY,
-    name text NOT NULL
+    name text PRIMARY KEY
 );
 
 CREATE TABLE IF NOT EXISTS public.book_genres (
     isbn text,
-    genre_id int,
+    genre_id text,
     PRIMARY KEY (isbn, genre_id),
     FOREIGN KEY (isbn) REFERENCES books,
-    FOREIGN KEY (genre_id) REFERENCES genres
+    FOREIGN KEY (genre_id) REFERENCES genres (name)
 );
 
 CREATE TABLE IF NOT EXISTS public.cart_books (
