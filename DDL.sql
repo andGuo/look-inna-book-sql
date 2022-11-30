@@ -78,8 +78,13 @@ CREATE TABLE IF NOT EXISTS public.carts(
 CREATE TABLE IF NOT EXISTS public.publishers(
     publisher_id uuid PRIMARY KEY,
     name text NOT NULL,
-    email text NOT NULL,
-    phone_number text NOT NULL 
+    email text NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS public.publisher_phones(
+    publisher_id uuid PRIMARY KEY,
+    number text NOT NULL,
+    FOREIGN KEY (publisher_id) REFERENCES publishers
 );
 
 CREATE TABLE IF NOT EXISTS public.publisher_address(
