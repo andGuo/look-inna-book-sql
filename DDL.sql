@@ -22,8 +22,6 @@ CREATE TABLE IF NOT EXISTS public.profile_roles (
 
 CREATE TABLE IF NOT EXISTS public.user_address(
     profile_id uuid PRIMARY KEY,
-    first_name text NOT NULL,
-    last_name text NOT NULL,
     address text NOT NULL,
     apartment_suite text NULL,
     country text NOT NULL,
@@ -116,10 +114,16 @@ CREATE TABLE IF NOT EXISTS public.books(
 );
 
 CREATE TABLE IF NOT EXISTS public.genres (
+    genre_id serial PRIMARY KEY,
+    name text NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS public.book_genres (
     isbn text,
-    name text,
-    PRIMARY KEY (isbn, name),
-    FOREIGN KEY (isbn) REFERENCES books
+    genre_id int,
+    PRIMARY KEY (isbn, genre_id),
+    FOREIGN KEY (isbn) REFERENCES books,
+    FOREIGN KEY (genre_id) REFERENCES genres
 );
 
 CREATE TABLE IF NOT EXISTS public.cart_books (
