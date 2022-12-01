@@ -11,30 +11,25 @@ OR REPLACE FUNCTION create_publisher(
     institution_num int,
     account_num int,
     phoneNumbers text [],
-    apartment_suite text DEFAULT null
+    apartment_suite text DEFAULT null,
+    publisher_id uuid DEFAULT uuid_generate_v4()
 ) RETURNS void LANGUAGE plpgsql AS $$ 
 
-DECLARE pub_id uuid;
-
 BEGIN
-
-    pub_uid := uuid_generate_v4();
-
 INSERT INTO
     publishers (publisher_id, name, email)
 VALUES
-    (pub_uid, name, email) RETURNING publisher_id INTO pub_id;
+    (publisher_id, name, email);
 
 INSERT INTO
     publisher_phones (publisher_id, number)
 SELECT
-    *
+    publisher_id, num
 FROM
-    pub_id
-    CROSS JOIN unnest(phoneNumbers);
+    unnest(phoneNumbers) AS num;
 
 INSERT INTO
-    payment_info (
+    publisher_payment (
         publisher_id,
         transit_num,
         institution_num,
@@ -43,17 +38,14 @@ INSERT INTO
     )
 VALUES
     (
-        (
-            SELECT
-                publisher_id
-            FROM
-                pub_id
-        ),
+        publisher_id,
         transit_num,
         institution_num,
         account_num,
         0
     );
+
+INSERT INTO 
 
 END;
 

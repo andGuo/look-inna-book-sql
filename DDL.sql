@@ -99,7 +99,7 @@ CREATE TABLE IF NOT EXISTS public.publisher_address(
     FOREIGN KEY (publisher_id) REFERENCES publishers
 );
 
-CREATE TABLE IF NOT EXISTS public.payment_info(
+CREATE TABLE IF NOT EXISTS public.publisher_payment(
     publisher_id uuid PRIMARY KEY,
     transit_num numeric(5, 0) NOT NULL,
     institution_num numeric(3, 0) NOT NULL,
