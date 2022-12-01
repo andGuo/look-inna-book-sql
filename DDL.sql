@@ -76,14 +76,15 @@ CREATE TABLE IF NOT EXISTS public.carts(
 );
 
 CREATE TABLE IF NOT EXISTS public.publishers(
-    publisher_id uuid PRIMARY KEY,
+    publisher_id uuid PRIMARY KEY default uuid_generate_v4(),
     name text NOT NULL,
     email text NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS public.publisher_phones(
-    publisher_id uuid PRIMARY KEY,
-    number text NOT NULL,
+    publisher_id uuid,
+    number text,
+    PRIMARY KEY (publisher_id, number),
     FOREIGN KEY (publisher_id) REFERENCES publishers
 );
 
@@ -149,7 +150,7 @@ CREATE TABLE IF NOT EXISTS public.order_books (
 );
 
 CREATE TABLE IF NOT EXISTS public.authors(
-    author_id uuid PRIMARY KEY,
+    author_id uuid PRIMARY KEY default uuid_generate_v4(),
     first_name text NOT NULL,
     middle_name text NULL,
     last_name text NOT NULL
