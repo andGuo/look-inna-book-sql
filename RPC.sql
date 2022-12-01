@@ -47,6 +47,7 @@ VALUES
 
 INSERT INTO
     publisher_address (
+        publisher_id,
         address,
         apartment_suite,
         country,
@@ -57,11 +58,32 @@ INSERT INTO
 VALUES
     (
         publisher_id,
-        transit_num,
-        institution_num,
-        account_num,
-        0
+        address,
+        apartment_suite,
+        country,
+        city,
+        state,
+        zip_code
     );
+
+END;
+
+$$;
+
+
+CREATE
+OR REPLACE FUNCTION create_author(
+    first_name text,
+    middle_name text,
+    last_name text,
+    author_id uuid DEFAULT uuid_generate_v4()
+) RETURNS void LANGUAGE plpgsql AS $$ 
+
+BEGIN
+INSERT INTO
+    authors (author_id, first_name, middle_name, last_name)
+VALUES
+    (author_id, first_name, middle_name, last_name);
 
 END;
 
