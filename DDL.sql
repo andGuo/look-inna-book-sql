@@ -110,7 +110,7 @@ CREATE TABLE IF NOT EXISTS public.publisher_payment(
 
 CREATE TABLE IF NOT EXISTS public.books(
     isbn text PRIMARY KEY,
-    name text NOT NULL,
+    title text NOT NULL,
     msrp decimal(19,4) NOT NULL,
     num_pages int NOT NULL,
     pub_percentage decimal(6,5) NOT NULL,
