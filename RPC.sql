@@ -17,10 +17,13 @@ OR REPLACE FUNCTION create_publisher(
 DECLARE pub_id uuid;
 
 BEGIN
+
+    pub_uid := uuid_generate_v4();
+
 INSERT INTO
-    publishers (name, email)
+    publishers (publisher_id, name, email)
 VALUES
-    (name, email) RETURNING publisher_id INTO pub_id;
+    (pub_uid, name, email) RETURNING publisher_id INTO pub_id;
 
 INSERT INTO
     publisher_phones (publisher_id, number)
