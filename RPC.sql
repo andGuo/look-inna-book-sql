@@ -45,7 +45,23 @@ VALUES
         0
     );
 
-INSERT INTO 
+INSERT INTO
+    publisher_address (
+        address,
+        apartment_suite,
+        country,
+        city,
+        state,
+        zip_code
+    )
+VALUES
+    (
+        publisher_id,
+        transit_num,
+        institution_num,
+        account_num,
+        0
+    );
 
 END;
 
