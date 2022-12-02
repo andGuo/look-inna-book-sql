@@ -96,8 +96,8 @@ OR REPLACE FUNCTION create_book(
     msrp decimal,
     num_pages int,
     pub_percentage decimal,
-    publisher_id text,
-    authors text[],
+    publisher_id uuid,
+    authors uuid[],
     genres text[],
     img_url text DEFAULT NULL
 ) RETURNS void LANGUAGE plpgsql AS $$ 
@@ -107,6 +107,13 @@ INSERT INTO
     books (isbn, title, msrp, num_pages, pub_percentage, img_url, publisher_id)
 VALUES
     (isbn, title, msrp, num_pages, pub_percentage, img_url, publisher_id);
+
+INSERT INTO
+    authored (isbn, author_id)
+SELECT
+    isbn, author
+FROM
+    unnest(authors) AS author;
 
 END;
 
