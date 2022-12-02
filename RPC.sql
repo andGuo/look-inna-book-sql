@@ -88,3 +88,26 @@ VALUES
 END;
 
 $$;
+
+CREATE
+OR REPLACE FUNCTION create_book(
+    isbn text,
+    title text,
+    msrp decimal,
+    num_pages int,
+    pub_percentage decimal,
+    publisher_id text,
+    authors text[],
+    genres text[],
+    img_url text DEFAULT NULL
+) RETURNS void LANGUAGE plpgsql AS $$ 
+
+BEGIN
+INSERT INTO
+    books (isbn, title, msrp, num_pages, pub_percentage, img_url, publisher_id)
+VALUES
+    (isbn, title, msrp, num_pages, pub_percentage, img_url, publisher_id);
+
+END;
+
+$$;
