@@ -115,6 +115,13 @@ SELECT
 FROM
     unnest(authors) AS author;
 
+INSERT INTO
+    book_genres (isbn, genre_id)
+SELECT
+    isbn, genre
+FROM
+    unnest(genres) AS genre;
+
 END;
 
 $$;
