@@ -114,6 +114,7 @@ CREATE TABLE IF NOT EXISTS public.books(
     isbn text PRIMARY KEY,
     title text NOT NULL,
     msrp decimal(19,4) NOT NULL,
+    instock_quantity int NOT NULL DEFAULT 0,
     num_pages int NOT NULL,
     pub_percentage decimal(6,5) NOT NULL,
     img_url text NULL,

@@ -99,14 +99,15 @@ OR REPLACE FUNCTION create_book(
     publisher_id uuid,
     authors uuid[],
     genres text[],
+    instock_quantity int DEFAULT 0,
     img_url text DEFAULT NULL
 ) RETURNS void LANGUAGE plpgsql AS $$ 
 
 BEGIN
 INSERT INTO
-    books (isbn, title, msrp, num_pages, pub_percentage, img_url, publisher_id)
+    books (isbn, title, msrp, instock_quantity, num_pages, pub_percentage, img_url, publisher_id)
 VALUES
-    (isbn, title, msrp, num_pages, pub_percentage, img_url, publisher_id);
+    (isbn, title, msrp, instock_quantity, num_pages, pub_percentage, img_url, publisher_id);
 
 INSERT INTO
     authored (isbn, author_id)
