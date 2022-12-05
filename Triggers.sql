@@ -24,6 +24,7 @@ LANGUAGE plpgsql
 AS $$
 BEGIN
     INSERT INTO public.carts(profile_id) VALUES (NEW.profile_id);
+    RETURN NEW;
 END;
 $$;
 
@@ -32,7 +33,6 @@ CREATE TRIGGER on_profile_created
     AFTER INSERT ON public.profiles
     REFERENCING NEW TABLE AS new_profiles
     FOR EACH ROW EXECUTE PROCEDURE public.create_cart();
-     
 -- these don't work
 CREATE OR REPLACE FUNCTION public.update_carts()
 

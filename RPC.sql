@@ -9,7 +9,7 @@ OR REPLACE FUNCTION create_publisher(
     zip_code text,
     transit_num int,
     institution_num int,
-    account_num int,
+    account_num bigint,
     phoneNumbers text [],
     apartment_suite text DEFAULT null,
     publisher_id uuid DEFAULT uuid_generate_v4()
