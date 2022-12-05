@@ -174,7 +174,7 @@ DELETE FROM cart_books WHERE cart_books.isbn = isbn_;
 DELETE FROM book_genres WHERE book_genres.isbn = isbn_;
 DELETE FROM books WHERE books.isbn = isbn_;
 
-RETURN QUERY (SELECT isbn, title, msrp, num_pages, img_url, publisher_id, instock_quantity FROM books);
+RETURN QUERY (SELECT books.isbn, books.title, books.msrp, books.instock_quantity, books.num_pages, books.img_url, books.publisher_id FROM books);
 
 END;
 $$;
