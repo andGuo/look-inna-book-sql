@@ -70,17 +70,6 @@ CREATE TABLE IF NOT EXISTS public.billing_address(
     FOREIGN KEY (order_id) REFERENCES orders
 );
 
-CREATE VIEW carts AS
-SELECT
-    cart_id as profile_id,
-    SUM(quantity * msrp) as cart_total,
-    SUM(quantity) as total_quantity
-FROM
-    cart_books
-    JOIN books ON cart_books.isbn = books.isbn
-GROUP BY
-    cart_id;
-
 CREATE TABLE IF NOT EXISTS public.publishers(
     publisher_id uuid PRIMARY KEY default uuid_generate_v4(),
     name text NOT NULL,
@@ -143,9 +132,20 @@ CREATE TABLE IF NOT EXISTS public.cart_books (
     isbn text,
     quantity int NOT NULL,
     PRIMARY KEY (profile_id, isbn),
-    FOREIGN KEY (carprofile_idt_id) REFERENCES profiles,
+    FOREIGN KEY (profile_id) REFERENCES profiles,
     FOREIGN KEY (isbn) REFERENCES books
 );
+
+CREATE VIEW public.carts AS
+SELECT
+    profile_id,
+    SUM(quantity * msrp) as cart_total,
+    SUM(quantity) as total_quantity
+FROM
+    cart_books
+    JOIN books ON cart_books.isbn = books.isbn
+GROUP BY
+    profile_id;
 
 CREATE TABLE IF NOT EXISTS public.order_books (
     order_id int,
