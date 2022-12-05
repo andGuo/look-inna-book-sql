@@ -48,25 +48,29 @@ OR REPLACE FUNCTION public.update_carts() RETURNS TRIGGER LANGUAGE plpgsql AS $$
 UPDATE
   carts
 SET
-  carts.cart_total = (
+  cart_total = (
     SELECT
-      cart_id
+      cart_total
     FROM
       (
         SELECT
-          cart_id,
-          SUM(quantity * msrp) as cart_total,
-          SUM(quantity) as total_quantity
+          *
         FROM
-          cart_books
-          JOIN books ON cart_books.isbn = books.isbn
-        GROUP BY
-          cart_id
-      ) as t
-    WHERE
-      carts.profile_id = t.cart_id;
-
-) RETURN NEW;
+          carts
+        UNION
+        (
+          SELECT
+            cart_id as profile_id,
+            SUM(quantity * msrp) as cart_total,
+            SUM(quantity) as total_quantity
+          FROM
+            cart_books
+            JOIN books ON cart_books.isbn = books.isbn
+          GROUP BY
+            cart_id
+        )
+      ) as t WHERE carts.profile_id = NEW.cart
+  ) RETURN NEW;
 
 END;
 
@@ -80,5 +84,3 @@ INSERT
   OR
 UPDATE
   OR DELETE ON public.cart_books EXECUTE PROCEDURE public.update_carts();
-
--- Set up Book Image Storage:

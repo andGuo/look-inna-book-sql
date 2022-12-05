@@ -70,12 +70,16 @@ CREATE TABLE IF NOT EXISTS public.billing_address(
     FOREIGN KEY (order_id) REFERENCES orders
 );
 
-CREATE TABLE IF NOT EXISTS public.carts(
-    profile_id uuid PRIMARY KEY,
-    cart_total decimal(19,4) NOT NULL DEFAULT 0,
-    total_quantity int NOT NULL DEFAULT 0,
-    FOREIGN KEY (profile_id) REFERENCES profiles
-);
+CREATE VIEW carts AS
+SELECT
+    cart_id as profile_id,
+    SUM(quantity * msrp) as cart_total,
+    SUM(quantity) as total_quantity
+FROM
+    cart_books
+    JOIN books ON cart_books.isbn = books.isbn
+GROUP BY
+    cart_id;
 
 CREATE TABLE IF NOT EXISTS public.publishers(
     publisher_id uuid PRIMARY KEY default uuid_generate_v4(),
@@ -135,11 +139,11 @@ CREATE TABLE IF NOT EXISTS public.book_genres (
 );
 
 CREATE TABLE IF NOT EXISTS public.cart_books (
-    cart_id uuid,
+    profile_id uuid,
     isbn text,
     quantity int NOT NULL,
-    PRIMARY KEY (cart_id, isbn),
-    FOREIGN KEY (cart_id) REFERENCES carts,
+    PRIMARY KEY (profile_id, isbn),
+    FOREIGN KEY (carprofile_idt_id) REFERENCES profiles,
     FOREIGN KEY (isbn) REFERENCES books
 );
 
