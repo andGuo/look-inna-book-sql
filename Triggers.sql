@@ -33,7 +33,7 @@ CREATE TRIGGER on_profile_created
     REFERENCING NEW TABLE AS new_profiles
     FOR EACH ROW EXECUTE PROCEDURE public.create_cart();
      
-
+-- these don't work
 CREATE OR REPLACE FUNCTION public.update_carts()
 
 
