@@ -134,7 +134,24 @@ OR REPLACE FUNCTION is_owner(
 
 BEGIN
 
-SELECT EXISTS (SELECT * FROM profile_roles JOIN roles USING (role_id) WHERE pid = profile_id AND role_name = 'owner'); 
+RETURN EXISTS (SELECT * FROM profile_roles JOIN roles USING (role_id) WHERE pid = profile_id AND role_name = 'owner'); 
 
 END;
+$$;
+
+CREATE
+OR REPLACE FUNCTION add_to_cart(
+    isbn text,
+    quantity int,
+    cart_id uuid
+) RETURNS void LANGUAGE plpgsql AS $$ 
+
+BEGIN
+INSERT INTO
+    cart_books (cart_id, isbn, quantity)
+VALUES
+    (cart_id, isbn, quantity);
+
+END;
+
 $$;
