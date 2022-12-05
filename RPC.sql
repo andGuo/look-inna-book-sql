@@ -157,3 +157,24 @@ DO UPDATE SET quantity = EXCLUDED.quantity;
 END;
 
 $$;
+
+CREATE
+OR REPLACE FUNCTION remove_book(isbn_ text) RETURNS TABLE (
+    isbn text,
+    title text,
+    msrp decimal(19, 4),
+    instock_quantity int,
+    num_pages int,
+    img_url text,
+    publisher_id uuid
+) LANGUAGE plpgsql AS $$ BEGIN
+
+DELETE FROM authored WHERE authored.isbn = isbn_;
+DELETE FROM cart_books WHERE cart_books.isbn = isbn_;
+DELETE FROM book_genres WHERE book_genres.isbn = isbn_;
+DELETE FROM books WHERE books.isbn = isbn_;
+
+RETURN QUERY (SELECT isbn, title, msrp, num_pages, img_url, publisher_id, instock_quantity FROM books);
+
+END;
+$$;
