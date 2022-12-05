@@ -150,10 +150,14 @@ GROUP BY
 CREATE TABLE IF NOT EXISTS public.order_books (
     order_id int,
     isbn text,
+    title text NOT NULL,
+    price decimal(19,4) NOT NULL,
     quantity int NOT NULL,
+    pub_percentage decimal(6,5) NOT NULL,
+    publisher_id uuid NOT NULL,
     PRIMARY KEY (order_id, isbn),
     FOREIGN KEY (order_id) REFERENCES orders,
-    FOREIGN KEY (isbn) REFERENCES books
+    FOREIGN KEY (publisher_id) REFERENCES publishers 
 );
 
 CREATE TABLE IF NOT EXISTS public.authors(
