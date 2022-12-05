@@ -141,16 +141,18 @@ $$;
 
 CREATE
 OR REPLACE FUNCTION add_to_cart(
-    isbn text,
+    isbn_ text,
     quantity int,
-    cart_id uuid
+    cid uuid
 ) RETURNS void LANGUAGE plpgsql AS $$ 
 
 BEGIN
 INSERT INTO
     cart_books (cart_id, isbn, quantity)
 VALUES
-    (cart_id, isbn, quantity);
+    (cid, isbn_, quantity)
+ON CONFLICT (cart_id, isbn)
+DO UPDATE SET quantity = EXCLUDED.quantity;
 
 END;
 
