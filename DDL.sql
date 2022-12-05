@@ -72,8 +72,8 @@ CREATE TABLE IF NOT EXISTS public.billing_address(
 
 CREATE TABLE IF NOT EXISTS public.carts(
     profile_id uuid PRIMARY KEY,
-    cart_total decimal(19,4) NOT NULL,
-    total_quantity int NOT NULL,
+    cart_total decimal(19,4) NOT NULL DEFAULT 0,
+    total_quantity int NOT NULL DEFAULT 0,
     FOREIGN KEY (profile_id) REFERENCES profiles
 );
 
