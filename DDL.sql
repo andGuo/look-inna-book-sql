@@ -37,10 +37,22 @@ CREATE TABLE IF NOT EXISTS public.user_address(
 CREATE TABLE IF NOT EXISTS public.orders(
     order_id serial PRIMARY KEY,
     profile_id uuid NOT NULL,
-    order_date timestamp NOT NULL,
+    order_date timestamp NOT NULL DEFAULT NOW(),
     order_total decimal(19,4) NOT NULL,
     total_quantity int NOT NULL,
     FOREIGN KEY (profile_id) REFERENCES profiles
+);
+
+CREATE TABLE IF NOT EXISTS public.tracking_info(
+    order_id int PRIMARY KEY,
+    shipping_status text NOT NULL DEFAULT 'Pending',
+    creation_date timestamp NOT NULL DEFAULT NOW(),
+    delivery_date timestamp DEFAULT NULL,
+    delivered_date timestamp DEFAULT NULL,
+    city text DEFAULT NULL,
+    state text DEFAULT NULL,
+    country text DEFAULT NULL,
+    FOREIGN KEY (order_id) REFERENCES orders
 );
 
 CREATE TABLE IF NOT EXISTS public.shipping_address(
