@@ -178,3 +178,38 @@ RETURN QUERY (SELECT books.isbn, books.title, books.msrp, books.instock_quantity
 
 END;
 $$;
+
+CREATE
+OR REPLACE FUNCTION get_profile_cart(uid uuid) RETURNS TABLE (
+    isbn text,
+    purchase_quantity int,
+    title text,
+    msrp decimal(19, 4),
+    instock_quantity int,
+    num_pages int,
+    img_url text
+) LANGUAGE plpgsql AS $$ BEGIN
+
+RETURN QUERY (
+    SELECT
+        books.isbn,
+        t.quantity,
+        books.title,
+        books.msrp,
+        books.instock_quantity,
+        books.num_pages,
+        books.img_url
+    FROM
+        (
+            SELECT
+                *
+            FROM
+                cart_books
+            WHERE
+                uid = profile_id
+        ) as t
+        JOIN books ON t.isbn = books.isbn
+);
+
+END;
+$$;
