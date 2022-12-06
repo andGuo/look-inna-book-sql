@@ -186,7 +186,6 @@ OR REPLACE FUNCTION get_profile_cart(uid uuid) RETURNS TABLE (
     title text,
     msrp decimal(19, 4),
     instock_quantity int,
-    num_pages int,
     img_url text
 ) LANGUAGE plpgsql AS $$ BEGIN
 
@@ -197,7 +196,6 @@ RETURN QUERY (
         books.title,
         books.msrp,
         books.instock_quantity,
-        books.num_pages,
         books.img_url
     FROM
         (
