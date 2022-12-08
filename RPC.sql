@@ -212,29 +212,33 @@ RETURN QUERY (
 END;
 $$;
 
-CREATE OR REPLACE FUNCTION place_order(
-        shipFname text,
-        shipLname text,
-        shipAddr text,
-        shipCountry text,
-        shipCity text,
-        shipState text,
-        shipZipCode text,
-        shipPhoneNum text,
-        billFname text,
-        billLname text,
-        billAddr text,
-        billCountry text,
-        billCity text,
-        billState text,
-        billZipCode text,
-        uid uuid,
-        shipAptSuite text DEFAULT NULL,
-        billAptSuite text DEFAULT NULL
-) RETURNS VOID 
-LANGUAGE plpgsql AS $$ BEGIN
+CREATE
+OR REPLACE FUNCTION buy_book(uid uuid, isbn_ text) RETURNS void LANGUAGE plpgsql AS $$ BEGIN
 
+END;
+$$;
 
+CREATE
+OR REPLACE FUNCTION place_order(
+    shipFname text,
+    shipLname text,
+    shipAddr text,
+    shipCountry text,
+    shipCity text,
+    shipState text,
+    shipZipCode text,
+    shipPhoneNum text,
+    billFname text,
+    billLname text,
+    billAddr text,
+    billCountry text,
+    billCity text,
+    billState text,
+    billZipCode text,
+    uid uuid,
+    shipAptSuite text DEFAULT NULL,
+    billAptSuite text DEFAULT NULL
+) RETURNS void LANGUAGE plpgsql AS $ $ BEGIN
 
 END;
 $$;
