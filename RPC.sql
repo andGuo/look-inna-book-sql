@@ -218,7 +218,8 @@ OR REPLACE FUNCTION buy_book(uid uuid, isbn_ text) RETURNS void LANGUAGE plpgsql
 END;
 $$;
 
-CREATE OR REPLACE FUNCTION place_order(
+CREATE
+OR REPLACE FUNCTION place_order(
     shipFname text,
     shipLname text,
     shipAddr text,
@@ -237,18 +238,75 @@ CREATE OR REPLACE FUNCTION place_order(
     uid uuid,
     shipAptSuite text DEFAULT NULL,
     billAptSuite text DEFAULT NULL
-)
-RETURNS void LANGUAGE plpgsql AS
-$$
-BEGIN
-    INSERT INTO orders (profile_id, order_total, total_quantity) SELECT profile_id, cart_total, total_quantity FROM VIEW carts WHERE carts.profile_id = uid;
+) RETURNS void LANGUAGE plpgsql AS $$ BEGIN
+INSERT INTO
+    orders (profile_id, order_total, total_quantity)
+SELECT
+    profile_id,
+    cart_total,
+    total_quantity
+FROM
+    carts
+WHERE
+    carts.profile_id = uid;
 
-    INSERT INTO tracking_info (order_id) VALUES (lastval());
+INSERT INTO
+    tracking_info (order_id)
+VALUES
+    (lastval());
 
-    INSERT INTO shipping_address (order_id, first_name, last_name, address, apartment_suite, country, city, state, zip_code, phone_number)
-    VALUES (lastval(), shipFname, shipLname, shipAddr, shipAptSuite, shipCountry, shipCity, shipState, shipZipCode, shipPhoneNum);
+INSERT INTO
+    shipping_address (
+        order_id,
+        first_name,
+        last_name,
+        address,
+        apartment_suite,
+        country,
+        city,
+        state,
+        zip_code,
+        phone_number
+    )
+VALUES
+    (
+        lastval(),
+        shipFname,
+        shipLname,
+        shipAddr,
+        shipAptSuite,
+        shipCountry,
+        shipCity,
+        shipState,
+        shipZipCode,
+        shipPhoneNum
+    );
 
-    INSERT INTO billing_address (order_id, first_name, last_name, address, apartment_suite, country, city, state, zip_code)
-    VALUES (lastval(), billFname, billLname, billAddr, billAptSuite, billCountry, billCity, billState, billZipCode);
+INSERT INTO
+    billing_address (
+        order_id,
+        first_name,
+        last_name,
+        address,
+        apartment_suite,
+        country,
+        city,
+        state,
+        zip_code
+    )
+VALUES
+    (
+        lastval(),
+        billFname,
+        billLname,
+        billAddr,
+        billAptSuite,
+        billCountry,
+        billCity,
+        billState,
+        billZipCode
+    );
+
 END;
+
 $$;
