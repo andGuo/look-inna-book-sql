@@ -390,8 +390,8 @@ CREATE OR REPLACE FUNCTION generate_report() RETURNS TABLE (
 
 RETURN QUERY (
     SELECT
-        total_sales,
-        publisher_payment
+        t1.total_sales,
+        t2.publisher_payment
     FROM
         (
             SELECT
