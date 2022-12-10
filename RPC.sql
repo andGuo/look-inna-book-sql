@@ -312,7 +312,7 @@ INSERT INTO
         publisher_id
     )
 SELECT
-    order_id,
+    lastval(),
     isbn,
     title,
     msrp,
@@ -324,7 +324,7 @@ FROM
     JOIN books
 WHERE
     quantity <= instock_quantity
-    AND profile_id = uuid;
+    AND cart_books.profile_id = uid;
 
 UPDATE
     books
@@ -340,7 +340,7 @@ FROM
             JOIN books
         WHERE
             quantity <= instock_quantity
-            AND profile_id = uuid
+            AND cart_books.profile_id = uid
     ) as ord
 WHERE
     books.isbn = ord.isbn;
