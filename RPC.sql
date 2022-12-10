@@ -353,3 +353,32 @@ WHERE
 END;
 
 $$;
+
+CREATE
+OR REPLACE FUNCTION get_profile_order(order_number int) RETURNS TABLE (
+    shipping_status text,
+    creation_date timestamp,
+    delivery_date timestamp,
+    delivered_date timestamp,
+    city text,
+    state text,
+    country text
+) LANGUAGE plpgsql AS $$ BEGIN
+
+RETURN QUERY (
+    SELECT
+        shipping_status,
+        creation_date,
+        delivery_date,
+        delivered_date,
+        city,
+        state,
+        country
+    FROM
+        tracking_info
+    WHERE
+        order_number = order_id
+);
+
+END;
+$$;
