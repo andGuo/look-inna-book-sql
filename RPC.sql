@@ -382,3 +382,29 @@ RETURN QUERY (
 
 END;
 $$;
+
+CREATE OR REPLACE FUNCTION generate_report() RETURNS TABLE (
+    total_sales decimal(19, 4),
+    total_expenses decimal(19, 4)
+) LANGUAGE plpgsql AS $$ BEGIN
+
+RETURN QUERY (
+    SELECT
+        total_sales,
+        publisher_payment
+    FROM
+        (
+            SELECT
+                SUM(order_total) as total_sales
+            FROM
+                orders
+        ) as t1
+        CROSS JOIN (
+            SELECT
+                SUM(accounts_payable) as publisher_payment
+            FROM
+                publisher_payment
+        ) as t2
+);
+END;
+$$;
