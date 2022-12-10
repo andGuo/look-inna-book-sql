@@ -367,13 +367,13 @@ OR REPLACE FUNCTION get_profile_order(order_number int) RETURNS TABLE (
 
 RETURN QUERY (
     SELECT
-        shipping_status,
-        creation_date,
-        delivery_date,
-        delivered_date,
-        city,
-        state,
-        country
+        tracking_info.shipping_status,
+        tracking_info.creation_date,
+        tracking_info.delivery_date,
+        tracking_info.delivered_date,
+        tracking_info.city,
+        tracking_info.state,
+        tracking_info.country
     FROM
         tracking_info
     WHERE
