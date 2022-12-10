@@ -408,3 +408,75 @@ RETURN QUERY (
 );
 END;
 $$;
+
+CREATE
+OR REPLACE FUNCTION gen_author_genre_sales(authors uuid [], genres text []) RETURNS decimal(19, 4) LANGUAGE plpgsql AS $$ BEGIN IF cardinality(authors) > 0
+AND cardinality(genres) > 0 THEN RETURN SUM(price * quantity)
+FROM
+    (
+        SELECT
+            *
+        FROM
+            order_books NATURAL
+            JOIN (
+                SELECT
+                    DISTINCT isbn
+                FROM
+                    authored
+                WHERE
+                    authored.author_id = ANY(authors)
+            ) as t1
+    ) as t3 NATURAL
+    JOIN (
+        SELECT
+            *
+        FROM
+            order_books NATURAL
+            JOIN (
+                SELECT
+                    DISTINCT isbn
+                FROM
+                    book_genres
+                WHERE
+                    book_genres.genre_id = ANY(genres)
+            ) as t2
+    ) as t4;
+
+ELSIF cardinality(authors) > 0 THEN RETURN SUM(price * quantity)
+FROM
+    (
+        SELECT
+            *
+        FROM
+            order_books NATURAL
+            JOIN (
+                SELECT
+                    DISTINCT isbn
+                FROM
+                    authored
+                WHERE
+                    authored.author_id = ANY(authors)
+            ) as t1
+    ) as t3;
+
+ELSIF cardinality(genres) > 0 THEN RETURN SUM(price * quantity)
+FROM
+    (
+        SELECT
+            *
+        FROM
+            order_books NATURAL
+            JOIN (
+                SELECT
+                    DISTINCT isbn
+                FROM
+                    book_genres
+                WHERE
+                    book_genres.genre_id = ANY(genres)
+            ) as t2
+    ) as t4;
+
+END IF;
+
+END;
+$$;
