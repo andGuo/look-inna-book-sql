@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS public.roles (
     role_name text NOT NULL
 );
 
--- INSERT INTO public.roles (role_name) VALUES ('owner');
+INSERT INTO public.roles (role_name) VALUES ('owner');
 
 CREATE TABLE IF NOT EXISTS public.profile_roles (
     profile_id uuid,
