@@ -213,12 +213,6 @@ END;
 $$;
 
 CREATE
-OR REPLACE FUNCTION buy_book(uid uuid, isbn_ text) RETURNS void LANGUAGE plpgsql AS $$ BEGIN
-
-END;
-$$;
-
-CREATE
 OR REPLACE FUNCTION place_order(
     shipFname text,
     shipLname text,
@@ -306,6 +300,55 @@ VALUES
         billState,
         billZipCode
     );
+
+INSERT INTO
+    order_books (
+        order_id,
+        isbn,
+        title,
+        price,
+        quantity,
+        pub_percentage,
+        publisher_id
+    )
+SELECT
+    order_id,
+    isbn,
+    title,
+    msrp,
+    quantity,
+    pub_percentage,
+    publisher_id
+FROM
+    cart_books NATURAL
+    JOIN books
+WHERE
+    quantity <= instock_quantity
+    AND profile_id = uuid;
+
+UPDATE
+    books
+SET
+    instock_quantity = instock_quantity - ord.quantity
+FROM
+    (
+        SELECT
+            isbn,
+            quantity
+        FROM
+            cart_books NATURAL
+            JOIN books
+        WHERE
+            quantity <= instock_quantity
+            AND profile_id = uuid
+    ) as ord
+WHERE
+    books.isbn = ord.isbn;
+
+DELETE FROM
+    cart_books
+WHERE
+    uid = profile_id;
 
 END;
 
