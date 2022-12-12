@@ -76,10 +76,9 @@ OR REPLACE FUNCTION public.restock_books() RETURNS TRIGGER LANGUAGE plpgsql AS $
 UPDATE
   books
 SET
-  books.instock_quantity = books.instock_quantity + book_previous_month_sales(books.isbn)
+  instock_quantity = instock_quantity + book_previous_month_sales(isbn)
 WHERE
-  books.instock_quantity < 10
-  AND books.isbn = NEW.isbn;
+  instock_quantity < 10;
 
 RETURN NEW;
 
@@ -87,9 +86,9 @@ END;
 
 $$;
 
-DROP TRIGGER IF EXISTS on_book_purchase ON public.order_books;
+DROP TRIGGER IF EXISTS on_book_purchase ON public.books;
 
 CREATE TRIGGER on_book_purchase
 AFTER
 UPDATE
-  ON public.books EXECUTE PROCEDURE public.restock_books();
+  ON public.books WHEN (pg_trigger_depth() < 1) EXECUTE PROCEDURE public.restock_books();
