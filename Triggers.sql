@@ -57,3 +57,39 @@ CREATE TRIGGER on_order_books_created
 AFTER
 INSERT
   ON public.order_books EXECUTE PROCEDURE public.update_accounts_payable();
+
+CREATE
+OR REPLACE FUNCTION public.book_previous_month_sales(isbn_ text) RETURNS int LANGUAGE plpgsql AS $$ BEGIN RETURN SUM(order_books.quantity)
+FROM
+  order_books
+  JOIN orders on order_books.order_id = orders.order_id
+WHERE
+  order_books.isbn = isbn_
+  AND orders.order_date > ('now' :: timestamp - '1 month' :: interval);
+
+END;
+
+$$;
+
+CREATE
+OR REPLACE FUNCTION public.restock_books() RETURNS TRIGGER LANGUAGE plpgsql AS $$ BEGIN
+UPDATE
+  books
+SET
+  books.instock_quantity = books.instock_quantity + book_previous_month_sales(books.isbn)
+WHERE
+  books.instock_quantity < 10
+  AND books.isbn = NEW.isbn;
+
+RETURN NEW;
+
+END;
+
+$$;
+
+DROP TRIGGER IF EXISTS on_book_purchase ON public.order_books;
+
+CREATE TRIGGER on_book_purchase
+AFTER
+UPDATE
+  ON public.books EXECUTE PROCEDURE public.restock_books();
